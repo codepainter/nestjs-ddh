@@ -1,17 +1,18 @@
 import {
-  ArgumentNotProvidedException,
   ArgumentInvalidException,
+  ArgumentNotProvidedException,
   ArgumentOutOfRangeException,
 } from '../exceptions';
-import { Guard } from '../guard';
-import { convertPropsToObject } from '../utils';
-import { DateVO } from '../value-objects/date.value-object';
-import { ID } from '../value-objects/id.value-object';
+import {Guard} from '../guard';
+import {convertPropsToObject} from '../utils';
+import {DateVO} from '../value-objects/date.value-object';
+import {ID} from '../value-objects/id.value-object';
 
 export interface BaseEntityProps {
   id: ID;
   createdAt: DateVO;
   updatedAt: DateVO;
+  deletedAt?: DateVO;
 }
 
 export abstract class Entity<EntityProps> {
@@ -21,6 +22,7 @@ export abstract class Entity<EntityProps> {
     const now = DateVO.now();
     this._createdAt = now;
     this._updatedAt = now;
+    this._deletedAt = null;
     this.props = props;
   }
 
@@ -31,6 +33,8 @@ export abstract class Entity<EntityProps> {
   private readonly _createdAt: DateVO;
 
   private _updatedAt: DateVO;
+
+  private _deletedAt: DateVO | null;
 
   get id(): ID {
     return this._id;
@@ -82,6 +86,7 @@ export abstract class Entity<EntityProps> {
       id: this._id,
       createdAt: this._createdAt,
       updatedAt: this._updatedAt,
+      deletedAt: this._deletedAt,
       ...this.props,
     };
     return Object.freeze(propsCopy);
@@ -97,6 +102,7 @@ export abstract class Entity<EntityProps> {
       id: this._id.value,
       createdAt: this._createdAt.value,
       updatedAt: this._updatedAt.value,
+      deletedAt: this._deletedAt.value,
       ...propsCopy,
     };
     return Object.freeze(result);
