@@ -1,11 +1,11 @@
-import { Body, Controller, HttpStatus, Inject, Post } from '@nestjs/common';
-import { IdResponse } from 'src/interface-adapters/dtos/id.response.dto';
-import { routes } from '@config/app.routes';
-import { createUserSymbol } from '@modules/user/user.providers';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { CreateUserCommand } from './create-user.command';
-import { CreateUserService } from './create-user.service';
-import { CreateUserRequest } from './create-user.request.dto';
+import {IdResponse} from 'src/interface-adapters/dtos/id.response.dto';
+import {routes} from '@config/app.routes';
+import {createUserSymbol} from '@modules/user/user.providers';
+import {Body, Controller, HttpStatus, Inject, Post} from '@nestjs/common';
+import {ApiOperation, ApiResponse} from '@nestjs/swagger';
+import {CreateUserCommand} from './create-user.command';
+import {CreateUserRequest} from './create-user.request.dto';
+import {CreateUserService} from './create-user.service';
 
 @Controller()
 export class CreateUserHttpController {
