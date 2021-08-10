@@ -1,5 +1,5 @@
-import { ExceptionBase } from './exception.base';
-import { Exceptions } from './exception.types';
+import {ExceptionBase} from './exception.base';
+import {Exceptions} from './exception.types';
 
 /**
  * Indicates violation of some domain rule.

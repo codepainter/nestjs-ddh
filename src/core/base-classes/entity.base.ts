@@ -16,13 +16,12 @@ export interface BaseEntityProps {
 }
 
 export abstract class Entity<EntityProps> {
-  constructor(props: EntityProps) {
+  constructor(props: EntityProps, id?: ID) {
     this.validateProps(props);
-    this._id = ID.generate();
+    this._id = id ? id : ID.generate();
     const now = DateVO.now();
     this._createdAt = now;
     this._updatedAt = now;
-    this._deletedAt = null;
     this.props = props;
   }
 
@@ -34,7 +33,7 @@ export abstract class Entity<EntityProps> {
 
   private _updatedAt: DateVO;
 
-  private _deletedAt: DateVO | null;
+  private _deletedAt: DateVO | undefined;
 
   get id(): ID {
     return this._id;
@@ -86,7 +85,6 @@ export abstract class Entity<EntityProps> {
       id: this._id,
       createdAt: this._createdAt,
       updatedAt: this._updatedAt,
-      deletedAt: this._deletedAt,
       ...this.props,
     };
     return Object.freeze(propsCopy);
@@ -102,7 +100,6 @@ export abstract class Entity<EntityProps> {
       id: this._id.value,
       createdAt: this._createdAt.value,
       updatedAt: this._updatedAt.value,
-      deletedAt: this._deletedAt.value,
       ...propsCopy,
     };
     return Object.freeze(result);

@@ -35,6 +35,7 @@ export class CreateUserHttpController {
         postalCode: body.postalCode,
         street: body.street,
       },
+      password: body.password,
     });
 
     const id = await this.createUser.createUser(command);

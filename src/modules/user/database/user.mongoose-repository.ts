@@ -8,17 +8,17 @@ import {
 } from '@infrastructure/database/base-classes/mongoose.repository.base';
 import {Injectable, Logger} from '@nestjs/common';
 import {InjectModel} from '@nestjs/mongoose';
-import {UserMongooseEntity} from './user.mongoose-entity';
+import {USER_MONGOOSE_ENTITY, UserMongooseEntity} from './user.mongoose-entity';
 import {UserMongooseMapper} from './user.mongoose-mapper';
 import {UserRepositoryPort} from './user.repository.interface';
 
 @Injectable()
 export class UserMongooseRepository
   extends MongooseRepositoryBase<UserEntity, UserProps, UserMongooseEntity>
-  implements UserRepositoryPort {
-
+  implements UserRepositoryPort
+{
   constructor(
-    @InjectModel(UserMongooseEntity.name)
+    @InjectModel(USER_MONGOOSE_ENTITY)
     private readonly userRepository: Model<UserMongooseEntity>,
   ) {
     super(
@@ -30,10 +30,12 @@ export class UserMongooseRepository
 
   private async findOneByEmail(
     email: string,
-  ): Promise<UserMongooseEntity | undefined> {
-    const user = await this.userRepository.findOne({
-      where: { email },
-    }).exec();
+  ): Promise<UserMongooseEntity | null> {
+    const user = await this.userRepository
+      .findOne({
+        email,
+      })
+      .exec();
 
     return user;
   }
@@ -60,7 +62,7 @@ export class UserMongooseRepository
   ): WhereCondition<UserMongooseEntity> {
     const filter: QueryParams<UserMongooseEntity> = {};
     if (params.id) {
-      filter._id = params.id.value;
+      filter.id = params.id.value;
     }
     return filter as WhereCondition<UserMongooseEntity>;
   }

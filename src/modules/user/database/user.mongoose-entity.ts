@@ -1,8 +1,9 @@
-
 import {MongooseEntityBase} from '@infrastructure/database/base-classes/mongoose.entity.base';
 import {Prop, Schema} from '@nestjs/mongoose';
 
-@Schema({ collection: "users" })
+export const USER_MONGOOSE_ENTITY = 'USER_MONGOOSE_ENTITY';
+
+@Schema({ collection: 'users' })
 export class UserMongooseEntity extends MongooseEntityBase {
   constructor(props?: UserMongooseEntity) {
     super(props);
@@ -19,4 +20,7 @@ export class UserMongooseEntity extends MongooseEntityBase {
 
   @Prop()
   street!: string;
+
+  @Prop()
+  password!: string;
 }

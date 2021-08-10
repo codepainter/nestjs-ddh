@@ -3,4 +3,5 @@ export interface CreateUser {
   country: string;
   postalCode: string;
   street: string;
+  password: string;
 }

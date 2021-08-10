@@ -16,8 +16,9 @@ export type WhereCondition<MongooseEntity> = FilterQuery<MongooseEntity>;
 export abstract class MongooseRepositoryBase<
   Entity extends BaseEntityProps,
   EntityProps,
-  MongooseEntity
-  > implements RepositoryPort<Entity, EntityProps> {
+  MongooseEntity,
+> implements RepositoryPort<Entity, EntityProps>
+{
   protected constructor(
     protected readonly repository: Model<MongooseEntity>,
     protected readonly mapper: MongooseMapper<Entity, MongooseEntity>,
@@ -31,8 +32,8 @@ export abstract class MongooseRepositoryBase<
   ): WhereCondition<MongooseEntity>;
 
   async save(entity: Entity): Promise<Entity> {
-    const ormEntity = this.mapper.toMongooseEntity(entity);
-    const result = await this.repository.create(ormEntity);
+    const mongooseEntity = this.mapper.toMongooseEntity(entity);
+    const result = await this.repository.create(mongooseEntity);
     this.logger.debug(
       `[Entity persisted]: ${this.collection} ${entity.id.value}`,
     );
@@ -41,26 +42,26 @@ export abstract class MongooseRepositoryBase<
   }
 
   async saveMultiple(entities: Entity[]): Promise<Entity[]> {
-    const ormEntities = entities.map(entity => this.mapper.toMongooseEntity(entity));
+    const ormEntities = entities.map((entity) =>
+      this.mapper.toMongooseEntity(entity),
+    );
     const result = await this.repository.insertMany(ormEntities);
     this.logger.debug(
       `[Multiple entities persisted]: ${entities.length} ${this.collection}`,
     );
     await Promise.all(
-      entities.map(entity =>
+      entities.map((entity) =>
         DomainEvents.publishEvents(entity.id, this.logger),
       ),
     );
-    return result.map(entity => this.mapper.toDomainEntity(entity));
+    return result.map((entity) => this.mapper.toDomainEntity(entity));
   }
 
   async findOne(
     params: QueryParams<EntityProps> = {},
   ): Promise<Entity | undefined> {
     const filter = this.prepareQuery(params);
-    const found = await this.repository.findOne({
-      filter,
-    });
+    const found = await this.repository.findOne(filter);
     return found ? this.mapper.toDomainEntity(found) : undefined;
   }
 
@@ -73,7 +74,7 @@ export abstract class MongooseRepositoryBase<
   }
 
   async findOneByIdOrThrow(id: string): Promise<Entity> {
-    const found = await this.repository.findById(id);
+    const found = await this.repository.findByIdAndRemove(id);
     if (!found) {
       throw new NotFoundException();
     }
@@ -85,7 +86,7 @@ export abstract class MongooseRepositoryBase<
       where: this.prepareQuery(params),
     });
 
-    return result.map(item => this.mapper.toDomainEntity(item));
+    return result.map((item) => this.mapper.toDomainEntity(item));
   }
 
   async findManyPaginated({
@@ -95,15 +96,15 @@ export abstract class MongooseRepositoryBase<
   }: FindManyPaginatedParams<EntityProps>): Promise<
     DataWithPaginationMeta<Entity[]>
   > {
-
-    const data = await this.repository.find(this.prepareQuery(params))
-      .skip(pagination?.skip)
-      .limit(pagination?.limit)
+    const data = await this.repository
+      .find(this.prepareQuery(params))
+      .skip(pagination?.skip || 0)
+      .limit(pagination?.limit || 5)
       .sort(orderBy);
     const count = data.length || 0;
 
     const result: DataWithPaginationMeta<Entity[]> = {
-      data: data.map(item => this.mapper.toDomainEntity(item)),
+      data: data.map((item) => this.mapper.toDomainEntity(item)),
       count,
       limit: pagination?.limit,
       page: pagination?.page,
@@ -113,8 +114,12 @@ export abstract class MongooseRepositoryBase<
   }
 
   async delete(entity: Entity): Promise<Entity> {
-    await this.repository.remove(this.mapper.toMongooseEntity(entity));
-    this.logger.debug(`[Entity deleted]: ${this.collection} ${entity.id.value}`);
+    await this.repository.findOneAndRemove(
+      this.mapper.toMongooseEntity(entity),
+    );
+    this.logger.debug(
+      `[Entity deleted]: ${this.collection} ${entity.id.value}`,
+    );
     await DomainEvents.publishEvents(entity.id, this.logger);
     return entity;
   }

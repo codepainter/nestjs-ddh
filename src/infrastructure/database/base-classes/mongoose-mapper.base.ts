@@ -5,12 +5,12 @@ import {DateVO} from '@core/value-objects/date.value-object';
 import {ID} from '@core/value-objects/id.value-object';
 import {MongooseEntityBase} from './mongoose.entity.base';
 
-export type MongooseEntityProps<MongooseEntity> = Omit<
-  MongooseEntity,
-  'id' | 'createdAt' | 'updatedAt' | 'deletedAt'
->;
+export type MongooseEntityProps<MongooseEntity> = MongooseEntity;
 
-export abstract class MongooseMapper<Entity extends BaseEntityProps, MongooseEntity> {
+export abstract class MongooseMapper<
+  Entity extends BaseEntityProps,
+  MongooseEntity,
+> {
   constructor(
     private entityConstructor: new (...args: any[]) => Entity,
     private mongooseEntityConstructor: new (...args: any[]) => MongooseEntity,
@@ -18,7 +18,9 @@ export abstract class MongooseMapper<Entity extends BaseEntityProps, MongooseEnt
 
   protected abstract toDomainProps(mongooseEntity: MongooseEntity): unknown;
 
-  protected abstract toMongooseProps(entity: Entity): MongooseEntityProps<MongooseEntity>;
+  protected abstract toMongooseProps(
+    entity: Entity,
+  ): MongooseEntityProps<MongooseEntity>;
 
   toDomainEntity(mongooseEntity: MongooseEntity): Entity {
     const props = this.toDomainProps(mongooseEntity);
@@ -46,14 +48,17 @@ export abstract class MongooseMapper<Entity extends BaseEntityProps, MongooseEnt
     mongooseEntity: MongooseEntity,
   ): Entity {
     const entityCopy: any = Object.create(this.entityConstructor.prototype);
-    const mongooseEntityBase: MongooseEntityBase = (mongooseEntity as unknown) as MongooseEntityBase;
+    const mongooseEntityBase: MongooseEntityBase =
+      mongooseEntity as unknown as MongooseEntityBase;
 
     entityCopy.props = entityProps;
-    entityCopy._id = new ID(mongooseEntityBase._id);
+    entityCopy._id = new ID(mongooseEntityBase.id);
     entityCopy._createdAt = new DateVO(mongooseEntityBase.createdAt);
     entityCopy._updatedAt = new DateVO(mongooseEntityBase.updatedAt);
-    entityCopy._deletedAt = new DateVO(mongooseEntityBase.deletedAt);
+    entityCopy._deletedAt = mongooseEntityBase.deletedAt
+      ? new DateVO(mongooseEntityBase.deletedAt)
+      : undefined;
 
-    return (entityCopy as unknown) as Entity;
+    return entityCopy as unknown as Entity;
   }
 }

@@ -1,9 +1,6 @@
-import { v4 as uuidV4, validate } from 'uuid';
-import { ArgumentInvalidException } from '../exceptions';
-import {
-  DomainPrimitive,
-  ValueObject,
-} from '../base-classes/value-object.base';
+import {v4 as uuidV4, validate} from 'uuid';
+import {DomainPrimitive, ValueObject} from '../base-classes/value-object.base';
+import {ArgumentInvalidException} from '../exceptions';
 
 export class ID extends ValueObject<string> {
   constructor(value: string) {

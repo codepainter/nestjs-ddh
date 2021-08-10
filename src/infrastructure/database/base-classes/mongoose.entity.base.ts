@@ -1,6 +1,6 @@
+import {Prop, Schema} from '@nestjs/mongoose';
 
-import {Prop} from '@nestjs/mongoose';
-
+@Schema()
 export abstract class MongooseEntityBase {
   constructor(props?: unknown) {
     if (props) {
@@ -8,15 +8,15 @@ export abstract class MongooseEntityBase {
     }
   }
 
-  @Prop({ alias: "id" })
-  _id!: string;
+  @Prop()
+  id!: string;
 
-  @Prop({ type: Date })
+  @Prop()
   createdAt!: Date;
 
-  @Prop({ type: Date })
+  @Prop()
   updatedAt!: Date;
 
-  @Prop({ type: Date })
-  deletedAt: Date;
+  @Prop()
+  deletedAt?: Date;
 }
