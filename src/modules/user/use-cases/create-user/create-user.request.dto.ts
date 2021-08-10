@@ -1,12 +1,6 @@
-import { CreateUser } from 'src/interface-adapters/interfaces/user/create.user.interface';
-import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsAlpha,
-  IsAlphanumeric,
-  IsEmail,
-  IsString,
-  MaxLength,
-} from 'class-validator';
+import {IsAlpha, IsAlphanumeric, IsEmail, IsString, MaxLength, MinLength} from 'class-validator';
+import {CreateUser} from 'src/interface-adapters/interfaces/user/create.user.interface';
+import {ApiProperty} from '@nestjs/swagger';
 
 export class CreateUserRequest implements CreateUser {
   @ApiProperty({
@@ -32,4 +26,10 @@ export class CreateUserRequest implements CreateUser {
   @MaxLength(50)
   @IsAlphanumeric()
   street!: string;
+
+  @ApiProperty({ description: 'Password' })
+  @MinLength(8)
+  @MaxLength(24)
+  @IsAlphanumeric()
+  password!: string;
 }

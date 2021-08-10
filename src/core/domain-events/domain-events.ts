@@ -1,8 +1,8 @@
-import { AggregateRoot } from '../base-classes/aggregate-root.base';
-import { Logger } from '../ports/logger.port';
-import { DomainEvent } from '.';
-import { final } from '../decorators/final.decorator';
-import { ID } from '../value-objects/id.value-object';
+import {AggregateRoot} from '../base-classes/aggregate-root.base';
+import {final} from '../decorators/final.decorator';
+import {Logger} from '../ports/logger.port';
+import {ID} from '../value-objects/id.value-object';
+import {DomainEvent} from './';
 
 export interface EventHandler {
   subscribeTo(event: DomainEvent): void;
@@ -66,7 +66,7 @@ export class DomainEvents {
   private static removeAggregateFromPublishList(
     aggregate: AggregateRoot<unknown>,
   ): void {
-    const index = this.aggregates.findIndex(a => a.equals(aggregate));
+    const index = this.aggregates.findIndex((a) => a.equals(aggregate));
     this.aggregates.splice(index, 1);
   }
 
@@ -75,7 +75,7 @@ export class DomainEvents {
 
     if (this.subscribers.has(eventName)) {
       const callbacks: EventCallback[] = this.subscribers.get(eventName) || [];
-      await Promise.all(callbacks.map(callback => callback(event)));
+      await Promise.all(callbacks.map((callback) => callback(event)));
     }
   }
 }

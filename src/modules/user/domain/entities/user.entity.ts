@@ -1,12 +1,13 @@
-import { AggregateRoot } from '@core/base-classes/aggregate-root.base';
-
-import { UserCreatedDomainEvent } from '../events/user-created.domain-event';
-import { Address, AddressProps } from '../value-objects/address.value-object';
-import { Email } from '../value-objects/email.value-object';
+import {AggregateRoot} from '@core/base-classes/aggregate-root.base';
+import {ID} from '@core/value-objects/id.value-object';
+import {UserCreatedDomainEvent} from '../events/user-created.domain-event';
+import {Address, AddressProps} from '../value-objects/address.value-object';
+import {Email} from '../value-objects/email.value-object';
 
 export interface UserProps {
   email: Email;
   address: Address;
+  password: string;
 }
 
 export interface UpdateUserAddressProps {
@@ -16,8 +17,8 @@ export interface UpdateUserAddressProps {
 }
 
 export class UserEntity extends AggregateRoot<UserProps> {
-  constructor(props: UserProps) {
-    super(props);
+  constructor(props: UserProps, id?: ID) {
+    super(props, id);
     /* adding "UserCreated" Domain Event that will be published
     eventually so an event handler somewhere may receive it and do an
     appropriate action, like sending confirmation email, adding user

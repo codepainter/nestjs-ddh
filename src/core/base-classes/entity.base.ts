@@ -1,23 +1,24 @@
 import {
-  ArgumentNotProvidedException,
   ArgumentInvalidException,
+  ArgumentNotProvidedException,
   ArgumentOutOfRangeException,
 } from '../exceptions';
-import { Guard } from '../guard';
-import { convertPropsToObject } from '../utils';
-import { DateVO } from '../value-objects/date.value-object';
-import { ID } from '../value-objects/id.value-object';
+import {Guard} from '../guard';
+import {convertPropsToObject} from '../utils';
+import {DateVO} from '../value-objects/date.value-object';
+import {ID} from '../value-objects/id.value-object';
 
 export interface BaseEntityProps {
   id: ID;
   createdAt: DateVO;
   updatedAt: DateVO;
+  deletedAt?: DateVO;
 }
 
 export abstract class Entity<EntityProps> {
-  constructor(props: EntityProps) {
+  constructor(props: EntityProps, id?: ID) {
     this.validateProps(props);
-    this._id = ID.generate();
+    this._id = id ? id : ID.generate();
     const now = DateVO.now();
     this._createdAt = now;
     this._updatedAt = now;
@@ -31,6 +32,8 @@ export abstract class Entity<EntityProps> {
   private readonly _createdAt: DateVO;
 
   private _updatedAt: DateVO;
+
+  private _deletedAt: DateVO | undefined;
 
   get id(): ID {
     return this._id;

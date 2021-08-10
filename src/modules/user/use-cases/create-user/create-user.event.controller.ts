@@ -1,10 +1,10 @@
-import { createUserSymbol } from '@modules/user/user.providers';
-import { Inject } from '@nestjs/common';
-import { MessagePattern } from '@nestjs/microservices';
-import { IdResponse } from 'src/interface-adapters/dtos/id.response.dto';
-import { CreateUserCommand } from './create-user.command';
-import { CreateUserRequest } from './create-user.request.dto';
-import { CreateUserService } from './create-user.service';
+import {IdResponse} from 'src/interface-adapters/dtos/id.response.dto';
+import {createUserSymbol} from '@modules/user/user.providers';
+import {Inject} from '@nestjs/common';
+import {MessagePattern} from '@nestjs/microservices';
+import {CreateUserCommand} from './create-user.command';
+import {CreateUserRequest} from './create-user.request.dto';
+import {CreateUserService} from './create-user.service';
 
 export class CreateUserEventController {
   constructor(
@@ -21,6 +21,7 @@ export class CreateUserEventController {
         postalCode: payload.postalCode,
         street: payload.street,
       },
+      password: payload.password,
     });
 
     const id = await this.createUser.createUser(command);

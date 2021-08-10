@@ -1,5 +1,5 @@
-import { ObjectLiteral } from '../types';
-import { Exceptions } from './exception.types';
+import {ObjectLiteral} from '../types';
+import {Exceptions} from './exception.types';
 
 export interface SerializedException {
   name: string;
