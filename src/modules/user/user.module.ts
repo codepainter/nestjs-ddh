@@ -6,6 +6,9 @@ import {CreateUserHttpController} from './use-cases/create-user/create-user.http
 import {
   FindUserByEmailHttpController,
 } from './use-cases/find-user-by-email/find-user-by-email.http.controller';
+import {
+  FindUserByIdHttpController,
+} from './use-cases/find-user-by-id/find-user-by-id.http.controller';
 import {DeleteUserHttpController} from './use-cases/remove-user/delete-user.http.controller';
 import {createUserProvider, removeUserProvider} from './user.providers';
 
@@ -22,6 +25,7 @@ import {createUserProvider, removeUserProvider} from './user.providers';
     CreateUserHttpController,
     DeleteUserHttpController,
     FindUserByEmailHttpController,
+    FindUserByIdHttpController,
   ],
   providers: [UserMongooseRepository, createUserProvider, removeUserProvider],
 })
