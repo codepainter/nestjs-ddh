@@ -1,16 +1,14 @@
-import {Model} from 'mongoose';
-import {UserEntity, UserProps} from 'src/modules/user/domain/entities/user.entity';
-import {QueryParams} from '@core/ports/repository.ports';
-import {NotFoundException} from '@exceptions';
-import {
-  MongooseRepositoryBase,
-  WhereCondition,
-} from '@infrastructure/database/base-classes/mongoose.repository.base';
-import {Injectable, Logger} from '@nestjs/common';
-import {InjectModel} from '@nestjs/mongoose';
-import {USER_MONGOOSE_ENTITY, UserMongooseEntity} from './user.mongoose-entity';
-import {UserMongooseMapper} from './user.mongoose-mapper';
-import {UserRepositoryPort} from './user.repository.interface';
+import { Model } from 'mongoose';
+import { UserEntity, UserProps } from 'src/modules/user/domain/entities/user.entity';
+
+import { QueryParams } from '@core/ports/repository.ports';
+import { MongooseRepositoryBase, WhereCondition } from '@infrastructure/database/base-classes/mongoose.repository.base';
+import { Injectable, Logger } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+
+import { USER_MONGOOSE_ENTITY, UserMongooseEntity } from './user.mongoose-entity';
+import { UserMongooseMapper } from './user.mongoose-mapper';
+import { UserRepositoryPort } from './user.repository.interface';
 
 @Injectable()
 export class UserMongooseRepository
@@ -40,11 +38,11 @@ export class UserMongooseRepository
     return user;
   }
 
-  async findOneByEmailOrThrow(email: string): Promise<UserEntity> {
+  async findOneByEmailOrUndefined(
+    email: string,
+  ): Promise<UserEntity | undefined> {
     const user = await this.findOneByEmail(email);
-    if (!user) {
-      throw new NotFoundException();
-    }
+    if (!user) return;
     return this.mapper.toDomainEntity(user);
   }
 

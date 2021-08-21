@@ -1,8 +1,9 @@
-import {AggregateRoot} from '@core/base-classes/aggregate-root.base';
-import {ID} from '@core/value-objects/id.value-object';
-import {UserCreatedDomainEvent} from '../events/user-created.domain-event';
-import {Address, AddressProps} from '../value-objects/address.value-object';
-import {Email} from '../value-objects/email.value-object';
+import { AggregateRoot } from '@core/base-classes/aggregate-root.base';
+import { ID } from '@core/value-objects/id.value-object';
+
+import { UserCreatedDomainEvent } from '../events/user-created.domain-event';
+import { Address, AddressProps } from '../value-objects/address.value-object';
+import { Email } from '../value-objects/email.value-object';
 
 export interface UserProps {
   email: Email;

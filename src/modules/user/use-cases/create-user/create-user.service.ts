@@ -1,3 +1,5 @@
+import { hash } from 'bcryptjs';
+
 import { ID } from '@core/value-objects/id.value-object';
 import { ConflictException } from '@exceptions';
 import { UserRepositoryPort } from '@modules/user/database/user.repository.interface';
@@ -17,7 +19,12 @@ export class CreateUserService {
       throw new ConflictException('User already exists');
     }
 
-    const user = new UserEntity(command);
+    const hashedPassword = await hash(command.password, 10);
+
+    const user = new UserEntity({
+      ...command,
+      password: hashedPassword,
+    });
 
     user.someBusinessLogic();
 

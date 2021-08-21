@@ -1,5 +1,5 @@
-import {Address, AddressProps} from '../../domain/value-objects/address.value-object';
-import {Email} from '../../domain/value-objects/email.value-object';
+import { Address, AddressProps } from '../../domain/value-objects/address.value-object';
+import { Email } from '../../domain/value-objects/email.value-object';
 
 export interface CreateUserProps {
   email: string;

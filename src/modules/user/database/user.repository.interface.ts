@@ -7,6 +7,6 @@ import { UserEntity, UserProps } from '../domain/entities/user.entity';
  convenience. */
 export interface UserRepositoryPort
   extends RepositoryPort<UserEntity, UserProps> {
-  findOneByEmailOrThrow(email: string): Promise<UserEntity>;
+  findOneByEmailOrUndefined(email: string): Promise<UserEntity | undefined>;
   exists(email: string): Promise<boolean>;
 }

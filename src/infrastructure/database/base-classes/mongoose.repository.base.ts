@@ -1,15 +1,17 @@
-import {FilterQuery, Model} from 'mongoose';
-import {DomainEvents} from '@core/domain-events';
-import {Logger} from '@core/ports/logger.port';
-import {BaseEntityProps} from '../../../core/base-classes/entity.base';
-import {NotFoundException} from '../../../core/exceptions';
+import { FilterQuery, Model } from 'mongoose';
+
+import { DomainEvents } from '@core/domain-events';
+import { Logger } from '@core/ports/logger.port';
+import { ID } from '@core/value-objects/id.value-object';
+
+import { BaseEntityProps } from '../../../core/base-classes/entity.base';
 import {
   DataWithPaginationMeta,
   FindManyPaginatedParams,
   QueryParams,
   RepositoryPort,
 } from '../../../core/ports/repository.ports';
-import {MongooseMapper} from './mongoose-mapper.base';
+import { MongooseMapper } from './mongoose-mapper.base';
 
 export type WhereCondition<MongooseEntity> = FilterQuery<MongooseEntity>;
 
@@ -65,19 +67,17 @@ export abstract class MongooseRepositoryBase<
     return found ? this.mapper.toDomainEntity(found) : undefined;
   }
 
-  async findOneOrThrow(params: QueryParams<EntityProps> = {}): Promise<Entity> {
+  async findOneOrUndefined(
+    params: QueryParams<EntityProps> = {},
+  ): Promise<Entity | undefined> {
     const found = await this.findOne(params);
-    if (!found) {
-      throw new NotFoundException();
-    }
+    if (!found) return;
     return found;
   }
 
-  async findOneByIdOrThrow(id: string): Promise<Entity> {
+  async findOneByIdOrUndefined(id: ID | string): Promise<Entity | undefined> {
     const found = await this.repository.findByIdAndRemove(id);
-    if (!found) {
-      throw new NotFoundException();
-    }
+    if (!found) return;
     return this.mapper.toDomainEntity(found);
   }
 

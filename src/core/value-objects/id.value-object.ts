@@ -1,6 +1,7 @@
-import {v4 as uuidV4, validate} from 'uuid';
-import {DomainPrimitive, ValueObject} from '../base-classes/value-object.base';
-import {ArgumentInvalidException} from '../exceptions';
+import { v4 as uuidV4, validate as validateUUID } from 'uuid';
+
+import { DomainPrimitive, ValueObject } from '../base-classes/value-object.base';
+import { ArgumentInvalidException } from '../exceptions';
 
 export class ID extends ValueObject<string> {
   constructor(value: string) {
@@ -22,7 +23,7 @@ export class ID extends ValueObject<string> {
   }
 
   protected validate({ value }: DomainPrimitive<string>): void {
-    if (!validate(value)) {
+    if (!validateUUID(value)) {
       throw new ArgumentInvalidException('Incorrect ID format');
     }
   }

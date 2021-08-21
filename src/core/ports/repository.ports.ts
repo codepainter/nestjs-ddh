@@ -22,11 +22,13 @@ export interface SaveMultiple<Entity> {
 }
 
 export interface FindOne<Entity, EntityProps> {
-  findOneOrThrow(params: QueryParams<EntityProps>): Promise<Entity>;
+  findOneOrUndefined(
+    params: QueryParams<EntityProps>,
+  ): Promise<Entity | undefined>;
 }
 
 export interface FindOneById<Entity> {
-  findOneByIdOrThrow(id: ID | string): Promise<Entity>;
+  findOneByIdOrUndefined(id: ID | string): Promise<Entity | undefined>;
 }
 
 export interface FindMany<Entity, EntityProps> {

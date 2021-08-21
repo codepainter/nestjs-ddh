@@ -10,7 +10,7 @@
     "build": "nest build --webpack",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
-    "start:dev": "nest start --webpack --watch",
+    "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
@@ -28,6 +28,7 @@
     "@nestjs/mongoose": "^8.0.1",
     "@nestjs/platform-express": "^8.0.6",
     "@nestjs/swagger": "^5.0.9",
+    "bcryptjs": "^2.4.3",
     "class-validator": "^0.13.1",
     "dotenv": "^10.0.0",
     "mongoose": "^5.13.7",
@@ -35,12 +36,14 @@
     "pg": "^8.7.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^7.3.0"
+    "rxjs": "^7.3.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.1.1",
     "@nestjs/schematics": "^8.0.2",
     "@nestjs/testing": "^8.0.6",
+    "@types/bcryptjs": "^2.4.2",
     "@types/express": "^4.17.13",
     "@types/jest": "^27.0.1",
     "@types/node": "^16.7.1",

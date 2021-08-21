@@ -1,20 +1,14 @@
-import {
-  CallHandler,
-  ExecutionContext,
-  NestInterceptor,
-  // To avoid confusion between internal exceptions and NestJS exceptions
-  ConflictException as NestConflictException,
-  NotFoundException as NestNotFoundException,
-  ForbiddenException as NestForbiddenException,
-} from '@nestjs/common';
-import { Observable, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+
+import { ConflictException, DomainException, ExceptionBase, NotFoundException } from '@exceptions';
+import { CallHandler, ExecutionContext, NestInterceptor } from '@nestjs/common';
 import {
-  ExceptionBase,
-  ConflictException,
-  NotFoundException,
-  DomainException,
-} from '@exceptions';
+  ConflictException as NestConflictException,
+  ForbiddenException as NestForbiddenException,
+  InternalServerErrorException as NestInternalServerErrorException,
+  NotFoundException as NestNotFoundException,
+} from '@nestjs/common/exceptions';
 
 export class ExceptionInterceptor implements NestInterceptor {
   intercept(
@@ -22,7 +16,7 @@ export class ExceptionInterceptor implements NestInterceptor {
     next: CallHandler,
   ): Observable<ExceptionBase> {
     return next.handle().pipe(
-      catchError(err => {
+      catchError((err) => {
         if (err instanceof DomainException) {
           throw new NestForbiddenException(err.message);
         }
@@ -32,7 +26,7 @@ export class ExceptionInterceptor implements NestInterceptor {
         if (err instanceof ConflictException) {
           throw new NestConflictException(err.message);
         }
-        return throwError(err);
+        throw new NestInternalServerErrorException('Unknown Error');
       }),
     );
   }
