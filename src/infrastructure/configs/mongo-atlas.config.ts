@@ -1,9 +1,11 @@
-import {config} from 'dotenv';
-import {MongooseModuleOptions} from '@nestjs/mongoose';
+import { config } from 'dotenv';
 
-config(); // Initializing dotenv
+import { MongooseModuleOptions } from '@nestjs/mongoose';
 
-export const mongoAtlasUri: string = process.env.MONGO_DB_URL || 'localhost';
+config();
+
+export const mongoAtlasUri: string =
+  process.env.MONGO_DB_URL || 'localhost:27017';
 export const mongoAtlasOptions: MongooseModuleOptions = {
   useNewUrlParser: true,
   useCreateIndex: true,
