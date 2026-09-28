@@ -23,4 +23,4 @@ jobs:
         run: |
           curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" \
             | tar -xz gitleaks
-          ./gitleaks git . --redact --no-banner --exit-code 1
+          ./gitleaks git . -c .gitleaks.toml --baseline-path .gitleaks-baseline.json --redact --no-banner --exit-code 1
